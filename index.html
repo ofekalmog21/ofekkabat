@@ -1,376 +1,850 @@
+
 <!DOCTYPE html>
-<html lang="he">
+<html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>משחק ניהול סיכונים - ניווטים</title>
+  <title>משחק ניהול סיכונים</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      direction: rtl;
-      background-color: #f0f8ff;
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to bottom right, #1e3c58, #2e4f68, #42657b);
+      color: white;
       text-align: center;
+      min-height: 100vh;
+    }
+
+    #game-container {
+      max-width: 800px;
+      margin: auto;
       padding: 20px;
     }
-    h1 {
-      color: #2f4f4f;
-      font-size: 36px;
-      margin-bottom: 20px;
-    }
-    .btn-start, .btn-restart {
-      padding: 15px 40px;
-      margin: 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 20px;
-      border-radius: 10px;
-      transition: background-color 0.3s ease;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .btn-start:hover, .btn-restart:hover {
-      background-color: #45a049;
-    }
-    .intro-text {
-      font-size: 22px;
-      color: #6fa3d1;
-      margin: 30px auto;
-      max-width: 600px;
-    }
-    .footer {
-      font-size: 14px;
-      color: #888;
-      margin-top: 40px;
-    }
-    .footer a {
-      color: #4CAF50;
-      text-decoration: none;
-    }
-    .footer a:hover {
-      text-decoration: underline;
-    }
-    .header-container {
-      background-color: #2f4f4f;
-      color: white;
-      padding: 50px 20px;
+
+    #start-screen {
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.2);
       border-radius: 15px;
-      box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.1);
-      margin-bottom: 40px;
-    }
-    .game-container {
-      margin-top: 30px;
-    }
-    .btn {
-      padding: 12px 30px;
-      margin: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 18px;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
-    .btn:hover {
-      background-color: #45a049;
-    }
-    #explanation {
-      font-size: 18px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
       margin-top: 20px;
     }
-    .result {
-      font-size: 24px;
-      margin-top: 30px;
-      font-weight: bold;
-      opacity: 0;
-      animation: fadeIn 2s forwards;
+
+    #start-screen h1 {
+      font-size: 50px;
+      margin-bottom: 10px;
+      color: #ff6347;
+      text-shadow: 0 0 20px rgba(255, 99, 71, 0.7);
+      animation: pulse 1.5s ease-in-out infinite;
     }
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-    #scenario {
-      margin-top: 40px;
-    }
-    .explanation-container {
-      background-color: #f9f9f9;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 20px;
-      margin-top: 20px;
-      font-size: 18px;
-      text-align: right;
-      width: 80%;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .correct {
-      color: green;
-      font-weight: bold;
-    }
-    .incorrect {
-      color: red;
-      font-weight: bold;
-    }
-    #next-button, #restart-button {
-      display: none;
-    }
-    #game {
-      display: none;
-    }
-    .final-message {
+
+    #start-screen h2 {
       font-size: 28px;
-      font-weight: bold;
-      animation: slideIn 2s ease-out forwards;
+      color: #d3d3d3;
+      margin-bottom: 30px;
     }
+
+    #start-screen img {
+      width: 120px;
+      height: 120px;
+      margin-bottom: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 99, 71, 0.5);
+    }
+
+    #registration-form {
+      width: 100%;
+      max-width: 500px;
+      text-align: right;
+      margin-bottom: 30px;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      margin-bottom: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+    }
+
+    .form-group input, .form-group select {
+      padding: 12px;
+      border-radius: 8px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus, .form-group select:focus {
+      border-color: #ff6347;
+      outline: none;
+      box-shadow: 0 0 10px rgba(255, 99, 71, 0.5);
+    }
+
+    .form-group select option {
+      background-color: #1e3c58;
+      color: #fff;
+    }
+
+    #start-btn {
+      padding: 18px 40px;
+      font-size: 20px;
+      background-color: #ff6347;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(255, 99, 71, 0.5);
+      transition: 0.3s;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    #start-btn:hover {
+      background-color: #e53e3e;
+      box-shadow: 0 0 30px rgba(229, 62, 62, 0.7);
+      transform: translateY(-2px);
+    }
+
+    #start-btn:disabled {
+      background-color: #888;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .question-container {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      margin-top: 20px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .question {
+      font-size: 24px;
+      margin-bottom: 25px;
+      color: #fff;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+      line-height: 1.4;
+    }
+
+    .question-number {
+      font-weight: bold;
+      color: #ff6347;
+      margin-bottom: 15px;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .progress-container {
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      margin-bottom: 20px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background-color: #ff6347;
+      width: 5%;
+      border-radius: 10px;
+      transition: width 0.5s ease-in-out;
+    }
+
+    .option {
+      background: rgba(30, 60, 88, 0.8);
+      color: #fff;
+      margin: 12px 0;
+      padding: 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      font-size: 18px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      animation: slideIn 0.5s ease-in-out;
+      position: relative;
+      overflow: hidden;
+      text-align: right;
+    }
+
+    .option:hover {
+      background-color: rgba(0, 191, 255, 0.2);
+      border-color: #00bfff;
+      transform: translateY(-2px);
+    }
+
+    .option:active {
+      transform: translateY(1px);
+    }
+
+    .option.correct {
+      background-color: rgba(46, 204, 113, 0.3);
+      border-color: #2ecc71;
+    }
+
+    .option.incorrect {
+      background-color: rgba(231, 76, 60, 0.3);
+      border-color: #e74c3c;
+    }
+
+    .explanation {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 12px;
+      font-size: 18px;
+      background-color: rgba(0, 0, 0, 0.3);
+      border-right: 4px solid #ff6347;
+      animation: fadeIn 1s ease-in-out;
+      text-align: right;
+      line-height: 1.5;
+    }
+
+    #next-btn {
+      margin-top: 25px;
+      padding: 15px 35px;
+      font-size: 18px;
+      background-color: #00bfff;
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+      transition: all 0.3s ease;
+      font-weight: bold;
+      display: none;
+    }
+
+    #next-btn:hover {
+      background-color: #009acd;
+      box-shadow: 0 0 25px rgba(0, 154, 205, 0.7);
+      transform: translateY(-2px);
+    }
+
+    #final-score {
+      font-size: 28px;
+      margin-top: 30px;
+      padding: 30px;
+      background-color: rgba(30, 60, 88, 0.7);
+      border-radius: 15px;
+      display: none;
+      animation: fadeIn 1s ease-in-out;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    #score-message {
+      font-size: 22px;
+      margin-top: 20px;
+      color: #ffcc00;
+      padding: 10px;
+    }
+
+    .player-info {
+      margin-top: 20px;
+      font-size: 20px;
+      color: #d3d3d3;
+      text-align: center;
+    }
+
+    #restart-btn {
+      margin-top: 20px;
+      padding: 15px 35px;
+      font-size: 18px;
+      background-color: #ff6347;
+      border: none;
+      border-radius: 30px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 99, 71, 0.5);
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    #restart-btn:hover {
+      background-color: #e53e3e;
+      box-shadow: 0 0 25px rgba(229, 62, 62, 0.7);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      font-size: 16px;
+      color: #d3d3d3;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #warning-icon {
+      font-size: 50px;
+      color: #ffcc00;
+      animation: pulse 1.5s infinite;
+      margin-bottom: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     @keyframes slideIn {
-      from { transform: translateX(-100%); opacity: 0; }
+      from { transform: translateX(-50px); opacity: 0; }
       to { transform: translateX(0); opacity: 1; }
     }
-    .fail {
-      color: red;
+
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .field-error {
+      color: #ff6347;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    /* עיצוב אנימציה כשעונים נכון/שגוי */
+    @keyframes correctAnswer {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes incorrectAnswer {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    .correct-icon, .incorrect-icon {
+      margin-left: 10px;
+      font-size: 20px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .option.correct .correct-icon {
+      opacity: 1;
+    }
+
+    .option.incorrect .incorrect-icon {
+      opacity: 1;
     }
   </style>
 </head>
 <body>
 
-<div class="header-container">
-  <h1>ברוכים הבאים למשחק ניהול סיכונים</h1>
-  <p class="intro-text">המשחק יבחן את הידע שלך בניהול סיכונים ויעזור לך ללמוד איך להתמודד עם תרחישים שונים בזמן ניווטים בשטח.</p>
-</div>
+<div id="game-container">
+  <div id="start-screen">
+    <div id="warning-icon">⚠️</div>
+    <h1>ניהול סיכונים לניווטים</h1>
+    <h2>משחק סימולציה אינטראקטיבי</h2>
+    
+    <div id="registration-form">
+      <div class="form-group">
+        <label for="full-name">שם מלא:</label>
+        <input type="text" id="full-name" placeholder="הכנס שם מלא" required>
+        <span class="field-error" id="name-error">יש להזין שם מלא</span>
+      </div>
+      
+      <div class="form-group">
+        <label for="platoon">פלוגה:</label>
+        <select id="platoon" required>
+          <option value="" disabled selected>בחר פלוגה</option>
+          <option value="א">א</option>
+          <option value="ב">ב</option>
+          <option value="ג">ג</option>
+          <option value="ד">ד</option>
+        </select>
+        <span class="field-error" id="platoon-error">יש לבחור פלוגה</span>
+      </div>
+      
+      <div class="form-group">
+        <label for="team">צוות:</label>
+        <select id="team" required>
+          <option value="" disabled selected>בחר צוות</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+        </select>
+        <span class="field-error" id="team-error">יש לבחור צוות</span>
+      </div>
+    </div>
+    
+    <button id="start-btn">התחל מבחן</button>
+  </div>
 
-<div class="game-container">
-  <button class="btn-start" onclick="startGame()">התחל את המשחק</button>
-</div>
+  <div id="question-container" class="question-container" style="display:none;">
+    <div class="progress-container">
+      <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    
+    <div class="player-info" id="player-info"></div>
+    <div class="question-number" id="question-number"></div>
+    <div class="question" id="question-text"></div>
+    <div id="options-container"></div>
+    <div id="explanation" class="explanation" style="display:none;"></div>
+  </div>
+  
+  <button id="next-btn">לשאלה הבאה</button>
+  
+  <div id="final-score"></div>
 
-<div id="game">
-  <div id="scenario"></div>
-  <div id="explanation" class="explanation-container"></div>
-  <div id="result" class="result"></div>
-  <button id="next-button" class="btn" onclick="nextScenario()">מעבר לשאלה הבאה</button>
-  <button id="restart-button" class="btn-restart" onclick="restartGame()">נסה שוב</button>
-</div>
-
-<div class="footer">
-  <p>הוכן לגדוד חרוב ע"י <a href="mailto:ofek@idf.mil.il">אופק אלמוג, הקב"ט</a></p>
+  <footer>
+    פותח ע"י אופק אלמוג, הקב"ט הגדודי
+  </footer>
 </div>
 
 <script>
+  const scenarios = [
+    {
+      number: 1,
+      question: "במהלך ניווט לילה, אחד החניכים מתלונן על קור וללא סופטשל. מה תעשה?",
+      options: [
+        "אמשיך בניווט ואוודא שהוא לא מתעכב",
+        "אפסיק את הניווט ואדאג לבגד מתאים",
+        "אציע לו לרוץ כדי להתחמם",
+      ],
+      explanations: [
+        "לא נכון. התעלמות מהמצב עלולה להוביל להיפותרמיה ואף סכנת חיים.",
+        "נכון. פעולה מיידית למניעת החמרת מצב והבטחת בטיחות החניך.",
+        "לא מספיק. ריצה אינה תחליף לביגוד מתאים בקור.",
+      ],
+      correctIndex: 1
+    },
+    {
+      number: 2,
+      question: "חניך מתלונן על כאבי ראש חזקים וסחרחורת. מה תעשה?",
+      options: [
+        "אדאג שינוח מעט וימשיך",
+        "אדווח מיד לקב\"ט ואזמין חובש",
+        "אבקש ממנו לשתות ולהמשיך",
+      ],
+      explanations: [
+        "לא נכון. יש חשש להתייבשות או מכת חום.",
+        "נכון. זו תגובה מקצועית שמונעת סיכון.",
+        "לא מספק. מים לא פותרים בעיה רפואית חריפה.",
+      ],
+      correctIndex: 1
+    },
+    {
+      number: 3,
+      question: "איבדת קשר עם אחד החניכים בניווט. מה תעשה?",
+      options: [
+        "אמתין מעט, אולי יחזור לבד",
+        "אפעיל נוהל חיפוש מיידי",
+        "אודיע למפקד בסוף הניווט",
+      ],
+      explanations: [
+        "לא נכון. כל דקה קריטית במקרה של נעדר.",
+        "נכון. נוהל חיפוש נועד בדיוק למצבים כאלה.",
+        "לא מספיק. צריך לפעול מיידית, לא לאחר מעשה.",
+      ],
+      correctIndex: 1
+    },
+    {
+      number: 4,
+      question: "חניך איבד את המצפן באמצע הניווט. מה תעשה?",
+      options: [
+        "אדווח למפקץ ואחביר אותו לקבוצה אחרת",
+        "אשלח אותו אחורה לבד",
+        "אתעלם מזה כי הוא יודע את השטח",
+      ],
+      explanations: [
+        "נכון. ניווט ללא מצפן מסוכן.",
+        "לא נכון. הליכה לבד מסוכנת",
+        "לא נכון. ידע בשטח לא מחליף אמצעים נדרשים.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 5,
+      question: "החניך מגיע לנקודת סיום ונראה חיוור וממלמל . מה עושים?",
+      options: [
+        "מניח לו לנוח מעט וממשיך",
+        "מזמין סיוע רפואי ומדווח",
+        "מבקש מהמפקד לדרבן אותו להמשיך",
+      ],
+      explanations: [
+        "לא מספיק. מצב פיזי ירוד מצריך בדיקה רפואית.",
+        "נכון. זה תפקוד נכון וזהיר.",
+        "לא נכון. דרבון עלול להחמיר מצב רפואי.",
+      ],
+      correctIndex: 1
+    },
+    {
+      number: 6,
+      question: "במהלך ניווט יום חם, החניך מגלה שהוא ללא בקבוק. מה עושים?",
+      options: [
+        "נותן לו בקבוק, דואג שישתה לפני המשך הניווט",
+        "שולח אותו אחורה",
+        "ממשיך כרגיל",
+      ],
+      explanations: [
+        "נכון. שתייה והפסקה הם קריטיים למניעת התייבשות.",
+        "לא מספיק. הוא זקוק להשגחה רפואית ולא שילך לבד.",
+        "לא נכון. המשך בלי שתייה עלול להוביל למכת חום.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 7,
+      question: "חניך מועד ונחבל ברגל. מה הפעולה הנכונה?",
+      options: [
+        "בודק תפקוד, מדווח ומזמין סיוע",
+        "נותן לו לנוח וממשיך לאחר מכן",
+        "מבקש שיחבוש לבד וימשיך",
+      ],
+      explanations: [
+        "נכון. פציעה מחייבת טיפול ובדיקה.",
+        "לא מספיק. מנוחה ללא אבחנה מסכנת.",
+        "לא נכון. טיפול עצמי אינו פתרון בשטח.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 8,
+      question: "החניך ללא מים באמצע המסלול. מה תעשה?",
+      options: [
+        "נותן לו מים משלי ודואג לדווח",
+        "ממשיך כי המסלול כמעט נגמר",
+        "מבקש שיקח מים מאחרים",
+      ],
+      explanations: [
+        "נכון. אספקת מים מיידית קריטית.",
+        "לא נכון. אפילו סיום קרוב מסוכן במצב כזה.",
+        "לא מספיק. לא מבטיח זמינות מים מיידית.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 9,
+      question: "חניך מתבלבל בשטח ואינו יודע מיקומו. מה הפעולה הנכונה?",
+      options: [
+        "אומר לו לפעול כנלמד בשיעורים ומחווין אותו",
+        "אומר לו להסתכל במפה טוב ולהבין לבד",
+        "מחכה שיחזור לבד לנקודת ההתחלה",
+      ],
+      explanations: [
+        "נכון. הכוונה ממוקדת מונעת בלבול וסיכוי לאאבד בשטח.",
+        "לא נכון. בלבול יכול להחריף ולסכן.",
+        "לא נכון. המתנה פאסיבית אינה פתרון.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 10,
+      question: "חניך שוכח את ציוד הסימון. מה עושים?",
+      options: [
+        "מחייב אותו להמשיך בלי לסמן",
+        "מספק לו ציוד חלופי ומדווח",
+        "אומר לו לרשום את הנקודות על דף",
+      ],
+      explanations: [
+        "לא נכון. סימון הוא תנאי הכרחי לבטיחות ומשימה.",
+        "נכון. ציוד חלופי שומר על איכות המשימה.",
+        "לא מספק. דף אינו תחליף לציוד ניווט תקני.",
+      ],
+      correctIndex: 1
+    },
+    {
+      number: 11,
+      question: "החניך מתעלף לשניות וחוזר לעצמו. מה תעשה?",
+      options: [
+        "עוצר הכל, מזמין סיוע רפואי",
+        "מבקש שינוח וימשיך",
+        "נותן לו לשתות ואוכל קל",
+      ],
+      explanations: [
+        "נכון. כל איבוד הכרה מצריך בדיקה רפואית מיידית.",
+        "לא נכון. התעלפות מצביעה על בעיה חמורה.",
+        "לא מספיק. לא מטפל בבעיה עצמה.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 12,
+      question: "חניך פולט כדור במהלך הפסקת מים. מה תעשה?",
+      options: [
+        "מפעיל נוהל פליטת כדור, מדווח ומפסיק את הפעילות",
+        "מנזף בו וממשיך",
+        "מבקש שיספר למפקד אחר כך",
+      ],
+      explanations: [
+        "נכון. פליטת כדור היא אירוע בטיחותי חמור.",
+        "לא נכון. נזיפה בלבד לא מספקת.",
+        "לא נכון. דיווח מיידי הכרחי.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 13,
+      question: "בחניון הסיום, אחד החניכים לא חזר בזמן. מה תעשה?",
+      options: [
+        "אפעיל מיד נוהל היעדרות",
+        "אחכה עוד 15 דק׳",
+        "אבדוק עם חברים שלו איפה הוא",
+      ],
+      explanations: [
+        "נכון. כל איחור מסוכן ודורש תגובה מיידית.",
+        "לא נכון. כל דקה חשובה באירוע נעדר.",
+        "לא מספק. אין תחליף לנוהל מסודר.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 14,
+      question: "חניך משתולל ולא מקשיב להוראות בטיחות. מה עושים?",
+      options: [
+        "עוצר את פעילותו, מדווח",
+        "משאיר אותו בשטח רק עם השגחה",
+        "מזהיר אותו בעל פה וממשיך",
+      ],
+      explanations: [
+        "נכון. הפרת משמעת מסכנת חיים בשטח.",
+        "לא נכון. נוכחותו ממשיכה לסכן.",
+        "לא מספיק. אזהרה אינה מספיקה.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 15,
+      question: "מזג האוויר השתנה ונהיה ערפילי במיוחד. מה עושים?",
+      options: [
+        "עוצרים את הניווט עד להתבהרות",
+        "ממשיכים בזהירות רבה",
+        "מתקרבים למסלולים סלולים",
+      ],
+      explanations: [
+        "נכון. תנאי ראות קשים מצריכים עצירה.",
+        "לא נכון. זה עדיין מסוכן.",
+        "לא מספק. לא תמיד יש דרך סלולה קרובה.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 16,
+      question: "החניך פועל בצורה מסוכנת ומרמה. מה עושים?",
+      options: [
+        "מדווח למפקץ",
+        "מתעלם",
+        "שואל למה",
+      ],
+      explanations: [
+        "נכון. מדובר באירוע משמעתי.",
+        "לא נכון. עצם ההחזקת הסכין לא תקינה.",
+        "לא מספיק. אין תחליף לדיווח רשמי.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 17,
+      question: "באמצע הניווט אחד החניכים מתחיל לפרוץ בבכי. מה תעשה?",
+      options: [
+        "עוצר, משוחח איתו ומדווח למפקדים",
+        "מתעלם כי הוא יירגע",
+        "מבקש מהקבוצה להרגיע אותו",
+      ],
+      explanations: [
+        "נכון. התערבות רגשית חשובה למניעת התדרדרות.",
+        "לא נכון. התעלמות מסכנת אותו.",
+        "לא מספק. צריך גורם אחראי ומנוסה.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 18,
+      question: "חניך עוקף את המסלול כדי לחסוך זמן. מה תעשה?",
+      options: [
+        "מדווח למפקדים על חריגה",
+        "מזהיר אותו",
+        "מתעלם ",
+      ],
+      explanations: [
+        "נכון. עבירה חמורה על נוהלי משמעת.",
+        "לא מספיק. נדרשת תגובה מערכתית.",
+        "לא נכון. אי אפשר להתעלם מחריגות מסוכנות.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 19,
+      question: "ציוד תקשורת הפסיק לפעול. מה תעשה?",
+      options: [
+        "עוצר את הניווט עד לתיקון או קבלת תחליף",
+        "ממשיך לפי לו״ז ומדווח בסיום",
+        "מנסה להעביר מסר דרך קבוצה אחרת",
+      ],
+      explanations: [
+        "נכון. ללא קשר – אין יכולת פיקוח.",
+        "לא נכון. כל פעילות חייבת קשר פעיל.",
+        "לא מספיק. מסר עקיף לא מבטיח תוצאה.",
+      ],
+      correctIndex: 0
+    },
+    {
+      number: 20,
+      question: "חניך עם חום קל מבקש להשתתף בכל זאת. מה עושים?",
+      options: [
+        "אוסר עליו לצאת ודורש אישור רפואי",
+        "מאפשר לו להשתתף עם השגחה",
+        "נותן לו מים וממשיך",
+      ],
+      explanations: [
+        "נכון. לא מסכנים חניך עם סימנים למחלה.",
+        "לא נכון. אפילו השגחה לא מספיקה במקרה רפואי.",
+        "לא מספק. מים אינם פותרים מצב רפואי.",
+      ],
+      correctIndex: 0
+    }
+  ];
+
+  let currentQuestion = 0;
   let score = 0;
-  let currentScenario = 0;
-  
-// פונקציה המערבבת את התשובות וממקמת את התשובה הנכונה במיקום רנדומלי
-function shuffleArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
 
-// פונקציה המערבבת את התשובות וממקמת את התשובה הנכונה במיקום רנדומלי
-function shuffleArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-const scenarios = [
-  {number: 1, question: "הצוער לא מרגיש טוב ומתחיל להרגיש סחרחורת.", options: shuffleArray([
-    {text: "לעצור את הניווט, לקרוא לעזרה ולתת לו מים", points: 5, explanation: "סחרחורת יכולה להיגרם מהתייבשות או עייפות, יש לעצור ולספק טיפול."},
-    {text: "למשוך אותו להמשיך עם הניווט, כי זה יחלוף", points: 0, explanation: "לא מומלץ להמשיך, יש לעצור ולטפל."},
-    {text: "לתת לו לנוח מספר דקות ולהמשיך", points: 0, explanation: "לא מספיק להמתין, יש צורך בטיפול מידי."}
-  ])},
-
-  {number: 2, question: "הם מבצעים ניווט בשטח קשה, אחד הצוערים מצהיר שהוא לא רואה טוב.", options: shuffleArray([
-    {text: "לעצור את הניווט ולקרוא לעזרה", points: 5, explanation: "חובה לעצור את הפעילות ולוודא שהצוער בטוח."},
-    {text: "להמשיך, כי זה יחלוף", points: 0, explanation: "לא ניתן להמשיך, יש לטפל."},
-    {text: "לתת לו לעצום עיניים ולהמשיך", points: 0, explanation: "לא פתרון טוב, יש לעצור ולבדוק את הבעיה."}
-  ])},
-
-  {number: 3, question: "במהלך ניווט לילה, צוער לא מצליח להבחין בנתיב.", options: shuffleArray([
-    {text: "יש להפסיק את הניווט ולוודא את המקום, לתת לו מנוחה", points: 5, explanation: "במצב כזה יש לעצור ולוודא שהצוער מבין את המפה."},
-    {text: "לדרוש ממנו להסתכל שוב ולנסות להמשיך", points: 0, explanation: "החושך יכול לגרום לטעויות, יש לעצור ולבדוק."},
-    {text: "להשתמש בפנסים עזים ולתת לו להמשיך", points: 0, explanation: "יש לנקוט בזהירות ולוודא שהצוער מבין את המפה."}
-  ])},
-
-  {number: 4, question: "הצוער לא לובש את הציוד הנדרש, אך טוען שהוא מרגיש טוב.", options: shuffleArray([
-    {text: "לא לאפשר לו להמשיך עד שיתארגן בצורה נכונה", points: 5, explanation: "ללבוש ציוד מתאים הוא הכרחי לביטחון."},
-    {text: "לאפשר לו להמשיך ולקוות שזה לא יפגע בו", points: 0, explanation: "אי התאמה לציוד עשויה להוביל לפציעות."},
-    {text: "להסביר לו את החשיבות של הציוד, ולהמשיך בינתיים", points: 0, explanation: "הציוד הכרחי, יש להקפיד על זה."}
-  ])},
-
-  {number: 5, question: "הצוער לא מצליח למצוא את מיקומו בנקודת הציון.", options: shuffleArray([
-    {text: "לעצור את הניווט ולבקש עזרה", points: 5, explanation: "אי וודאות יש לטפל בה מיד."},
-    {text: "לנסות להמשיך ולראות אם ימצא את הדרך", points: 0, explanation: "חשוב לעצור ולוודא את המיקום."},
-    {text: "לבקש ממנו ללכת בעקבות אחרים", points: 0, explanation: "אין להסתמך על אחרים בתנאים כאלה."}
-  ])},
-
-  {number: 6, question: "הצוער סובל מהתייבשות במהלך הניווט.", options: shuffleArray([
-    {text: "לעצור ולהציע לו מים מיד", points: 5, explanation: "התייבשות דורשת טיפול מיידי."},
-    {text: "לשלוח אותו להמשיך עד שמצבו ישתפר", points: 0, explanation: "לא ניתן להמשיך במצב כזה."},
-    {text: "להגיד לו לשתות וללכת לאט יותר", points: 0, explanation: "יש לעצור ולטפל באופן מיידי."}
-  ])},
-
-  {number: 7, question: "הצוער מתבל את המפה ולא מצליח להתמצא.", options: shuffleArray([
-    {text: "להפסיק את הניווט ולבקש עזרה", points: 5, explanation: "אם יש ספק, יש לעצור ולתאם את המיקום."},
-    {text: "לשלוח אותו להמשיך עד שימצא את הדרך", points: 0, explanation: "אין להסתמך על טעויות במפה."},
-    {text: "להגיד לו לשאול צוערים אחרים", points: 0, explanation: "הכיוון נכון רק אם הבעיה פתורה."}
-  ])},
-
-  {number: 8, question: "הצוער מצהיר שהוא לא מצליח להתרכז לאחר זמן ממושך בשמש.", options: shuffleArray([
-    {text: "להפסיק ולספק לו צל ומנוחה", points: 5, explanation: "סימנים של עייפות בשמש מחייבים טיפול."},
-    {text: "להגיד לו להמשיך להסתובב ולהתמקד", points: 0, explanation: "החום יכול להשפיע על הביצועים."},
-    {text: "להציע לו מים ולהגיד לו להמשיך", points: 0, explanation: "לא מספיק, יש צורך במנוחה."}
-  ])},
-
-  {number: 9, question: "הצוער נכנס לאזור שולי ויש עליו סימני פציעה.", options: shuffleArray([
-    {text: "לעצור, להפסיק את הניווט ולפנות לסיוע רפואי", points: 5, explanation: "יש להפסיק את הפעולה מיד במקרה של פציעה."},
-    {text: "לשלוח אותו להמשיך ולהתעלם מהפציעה", points: 0, explanation: "פציעה בשטח דורשת טיפול מיידי."},
-    {text: "לבקש ממנו לנוח עד שיתפוס כוחות", points: 0, explanation: "יש להפסיק את הפעילות ולספק טיפול מידי."}
-  ])},
-
-  {number: 10, question: "הצוער לא מצליח להבחין בדרך המתפתלת לשמאל.", options: shuffleArray([
-    {text: "להפסיק את הניווט, לקרוא לעזרה", points: 5, explanation: "יש לעצור ולתאם את המיקום."},
-    {text: "לשלוח אותו להמשיך, כי זה יסתדר", points: 0, explanation: "טעויות בניווט עלולות להחמיר, יש לעצור."},
-    {text: "לכוון אותו לתפוס את הדרך בצורה אחרת", points: 0, explanation: "יש לעצור ולוודא את המיקום הנכון."}
-  ])},
-
-  {number: 11, question: "הצוער מבצע ניווט בטווח קצר אך מתקשה למצוא את הציון.", options: shuffleArray([
-    {text: "לעצור ולוודא את המיקום עם מורה או מפקד", points: 5, explanation: "אם יש קושי, יש לוודא את המיקום."},
-    {text: "לשלוח אותו להמשיך עוד קצת", points: 0, explanation: "לא ניתן להמשיך בלי לדעת את המיקום."},
-    {text: "להגיד לו לחפש את הדרך עם כיוון תחושה", points: 0, explanation: "לא ניתן להסתמך על תחושה, יש לעצור."}
-  ])},
-
-  {number: 12, question: "הצוער אומר שהוא שוכח את הדרך כי הוא מתבל את כיוון הצפון.", options: shuffleArray([
-    {text: "לעצור ולסייע לו להתמקם נכון", points: 5, explanation: "חשוב מאוד לא להמשיך עד שלא יימצא המיקום."},
-    {text: "להגיד לו להסתמך על הזיכרון ולנסות", points: 0, explanation: "לא ניתן להסתמך על זיכרון, יש צורך בתיאום מיקום."},
-    {text: "לשלוח אותו לחפש את הצפון בעצמו", points: 0, explanation: "יש לסייע לו ולוודא את הכיוון."}
-  ])},
-
-  {number: 13, question: "הצוער מבצע ניווט אך יש לו קושי לזכור את הדרך.", options: shuffleArray([
-    {text: "לעצור ולחזור על הציונים", points: 5, explanation: "יש לעצור ולוודא שהצוער מבין את הדרך."},
-    {text: "לשלוח אותו להמשיך בינתיים", points: 0, explanation: "טעויות בניווט עלולות להיות מסוכנות."},
-    {text: "להגיד לו לחפש עזרה מצוערים אחרים", points: 0, explanation: "הכוונה עצמית היא חיונית לשיפור המצב."}
-  ])},
-
-  {number: 14, question: "הצוער מציין שהוא מרגיש עייף מאוד לאחר כמה שעות.", options: shuffleArray([
-    {text: "לעצור ולתת לו מנוחה", points: 5, explanation: "עייפות יכולה להיות מסוכנת, יש להפסיק ולטפל."},
-    {text: "לשלוח אותו להמשיך", points: 0, explanation: "המשכיות בעייפות עלולה לגרום לפציעות."},
-    {text: "לבקש ממנו לנוח כמה דקות ולהמשיך", points: 0, explanation: "יש להפסיק את הפעולה ולוודא שהוא מתאושש."}
-  ])},
-
-  {number: 15, question: "הצוער מצהיר שהוא חש סימני התייבשות במהלך ניווט.", options: shuffleArray([
-    {text: "לעצור ולספק לו מים מיידית", points: 5, explanation: "התייבשות דורשת טיפול מידי."},
-    {text: "לשלוח אותו להמשיך", points: 0, explanation: "המשך בשטח חם עלול להחמיר את ההתייבשות."},
-    {text: "לברר אם יש איתו מים נוספים", points: 0, explanation: "יש לספק לו מים מיד."}
-  ])},
-
-  {number: 16, question: "הצוער פוגע בעצמו בזמן מעבר על מכשול.", options: shuffleArray([
-    {text: "לעצור, להפסיק את הניווט ולפנות לעזרה רפואית", points: 5, explanation: "פציעה דורשת טיפול מיידי."},
-    {text: "לשלוח אותו להמשיך", points: 0, explanation: "פציעות דורשות טיפול מיידי."},
-    {text: "לגרום לו לנוח ולהתאושש", points: 0, explanation: "יש להפסיק את הפעולה ולפנות לסיוע."}
-  ])},
-
-  {number: 17, question: "הצוער מתבל את המפה לאחר זמן ממושך במעבר רגלי.", options: shuffleArray([
-    {text: "לעצור ולוודא את המיקום", points: 5, explanation: "טעויות במפה יכולות להוביל לטעויות גדולות."},
-    {text: "לשלוח אותו להמשיך ולראות אם ימצא את הדרך", points: 0, explanation: "טעויות עלולות להחמיר אם לא עוצרים."},
-    {text: "לבקש ממנו לברר את הדרך עם צוערים אחרים", points: 0, explanation: "צריך לוודא שהוא לא טועה."}
-  ])},
-
-  {number: 18, question: "הצוער סובל מכאבים ברגליים וכולל קושי בהליכה.", options: shuffleArray([
-    {text: "לעצור ולספק טיפול מידי", points: 5, explanation: "כאבים יכולים להחמיר ויש צורך בטיפול."},
-    {text: "לשלוח אותו להמשיך ולהסתפק בכאב", points: 0, explanation: "לא ניתן להמשיך במצב כזה."},
-    {text: "לברר אם הכאב חולף", points: 0, explanation: "צריך טיפול מיידי."}
-  ])},
-
-  {number: 19, question: "הצוער לא זוכר את הנקודה הבאה בניווט.", options: shuffleArray([
-    {text: "לעצור ולוודא את המיקום", points: 5, explanation: "אם יש ספק, יש לעצור ולוודא את המיקום."},
-    {text: "לשלוח אותו להמשיך ולראות אם ימצא את הדרך", points: 0, explanation: "חשוב מאוד לדעת את המיקום."},
-    {text: "לשלוח אותו לחפש אנשים אחרים", points: 0, explanation: "יש לוודא שהצוער לא טועה."}
-  ])},
-
-  {number: 20, question: "הצוער נפגע מאבן בשטח במהלך ניווט.", options: shuffleArray([
-    {text: "לעצור, לפנות לעזרה רפואית ולספק טיפול", points: 5, explanation: "פציעה בשטח דורשת טיפול מיידי."},
-    {text: "לשלוח אותו להמשיך", points: 0, explanation: "פציעה דורשת טיפול מידי."},
-    {text: "לבקש ממנו לנוח ולוודא שלא כואב", points: 0, explanation: "יש להפסיק את הפעולה."}
-  ])}
-];
+  // אתחול אירוע הלחיצה על כפתור ההתחלה
+  document.getElementById("start-btn").addEventListener("click", startGame);
 
   function startGame() {
-    document.querySelector(".header-container").style.display = "none";
-    document.querySelector(".game-container").style.display = "none";
-    document.getElementById("game").style.display = "block";
-    score = 0;
-    currentScenario = 0;
-    displayScenario();
+    console.log("המשחק מתחיל!"); // לוג לדיבוג
+    document.getElementById("start-screen").style.display = "none";
+    document.getElementById("question-container").style.display = "block";
+    loadQuestion();
   }
 
-  function restartGame() {
-    document.getElementById("result").innerHTML = "";
-    document.getElementById("restart-button").style.display = "none";
-    startGame();
+  function shuffle(array) {
+    const newArray = [...array]; // יצירת עותק כדי לא לשנות את המערך המקורי
+    for (let i = newArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
   }
 
-  function displayScenario() {
-    const scenario = scenarios[currentScenario];
-    document.getElementById("scenario").innerHTML = `<h2>תרחיש ${scenario.number}: ${scenario.question}</h2>`;
-    const optionsHTML = scenario.options.map((option, index) => {
-      return `<button class="btn" onclick="checkAnswer(${index})">${option.text}</button>`;
-    }).join("");
-    document.getElementById("explanation").innerHTML = "בחר תשובה:";
-    document.getElementById("result").innerHTML = "";
-    document.getElementById("next-button").style.display = "none";
-    document.getElementById("restart-button").style.display = "none";
-    document.getElementById("explanation").innerHTML += optionsHTML;
-  }
-
-  function checkAnswer(index) {
-    const scenario = scenarios[currentScenario];
-    const selectedOption = scenario.options[index];
-    const result = document.getElementById("result");
+  function loadQuestion() {
+    console.log("טוען שאלה מספר", currentQuestion + 1); // לוג לדיבוג
     
-    result.innerHTML = selectedOption.explanation;
-    if (selectedOption.points > 0) {
-      result.className = "result correct";
-      score += selectedOption.points;
-    } else {
-      result.className = "result incorrect";
-    }
+    const questionObj = scenarios[currentQuestion];
+    const indexes = [0, 1, 2];
+    const shuffledIndexes = shuffle(indexes);
     
-    document.getElementById("next-button").style.display = "inline-block";
-    if (currentScenario === scenarios.length - 1) {
-      document.getElementById("next-button").innerHTML = "סיים את המשחק";
+    let optionsHTML = '';
+    for (let i = 0; i < shuffledIndexes.length; i++) {
+      const originalIndex = shuffledIndexes[i];
+      optionsHTML += `<button class="option" data-index="${originalIndex}">${questionObj.options[originalIndex]}</button>`;
     }
+
+    // מאתחל את מיכל השאלה
+    const questionContainer = document.getElementById("question-container");
+    questionContainer.innerHTML = `
+      <div class="question-number">תרחיש ${questionObj.number} מתוך 20</div>
+      <div class="question">${questionObj.question}</div>
+      ${optionsHTML}
+      <div id="explanation" class="explanation" style="display:none;"></div>
+    `;
+
+    // הסרת כל המאזינים הקודמים והוספת חדשים
+    document.querySelectorAll(".option").forEach(btn => {
+      btn.addEventListener("click", handleOptionClick);
+    });
+
+    // אתחול כפתור הבא
+    const nextBtn = document.getElementById("next-btn");
+    nextBtn.style.display = "none";
+    nextBtn.onclick = handleNextClick;
   }
 
-  function nextScenario() {
-    if (currentScenario === scenarios.length - 1) {
-      showFinalScore();
+  function handleOptionClick() {
+    const selected = parseInt(this.getAttribute("data-index"));
+    const questionObj = scenarios[currentQuestion];
+
+    // מבטל את האפשרות ללחוץ על אפשרויות נוספות
+    document.querySelectorAll(".option").forEach(option => {
+      option.style.backgroundColor = "#1e3c58";
+      option.removeEventListener("click", handleOptionClick);
+    });
+
+    // מסמן את האפשרות שנבחרה
+    this.style.backgroundColor = "#FFA500";
+
+    // מציג את ההסבר
+    const explanation = document.getElementById("explanation");
+    explanation.style.display = "block";
+    explanation.textContent = questionObj.explanations[selected];
+    
+    // בדיקה אם התשובה נכונה ומתן 5 נקודות אם כן
+    if (selected === questionObj.correctIndex) {
+      score += 5;
+      console.log("תשובה נכונה! ניקוד כרגע:", score); // לוג לדיבוג
     } else {
-      currentScenario++;
-      displayScenario();
+      console.log("תשובה שגויה. ניקוד נשאר:", score); // לוג לדיבוג
     }
+
+    // מציג את כפתור המעבר לשאלה הבאה
+    document.getElementById("next-btn").style.display = "inline-block";
   }
 
-  function showFinalScore() {
-    document.getElementById("scenario").innerHTML = `<h2>סיימת את המשחק!</h2>`;
-    document.getElementById("explanation").innerHTML = `תוצאה סופית: ${score} מתוך ${scenarios.length * 5} נקודות`;
-
-    let finalMessage = "";
-    const result = document.getElementById("result");
-    if (score >= 80) {
-      finalMessage = `כל הכבוד, אתה בהחלט מנווט אחראי!`;
-      result.style.fontSize = "28px";
+  function handleNextClick() {
+    currentQuestion++;
+    
+    if (currentQuestion < scenarios.length) {
+      loadQuestion();
+      this.style.display = "none";
     } else {
-      finalMessage = `עוד מאמץ קטן ואתה מנווט בטיחותי`;
-      result.classList.add("fail");
+      // סיום המשחק - הצגת הציון הסופי
+      document.getElementById("question-container").style.display = "none";
+      this.style.display = "none";
+      
+      const finalScoreDiv = document.getElementById("final-score");
+      finalScoreDiv.style.display = "block";
+      
+      let scoreMessage = "";
+      if (score >= 80) {
+        scoreMessage = "עברת כל הכבוד! אתה מנווט בטוח";
+      } else {
+        scoreMessage = "עוד מאמץ קטן ואתה שם";
+      }
+      
+      finalScoreDiv.innerHTML = `
+        <h2>סיימת את המשחק!</h2>
+        <div>הציון הסופי שלך: ${score} מתוך 100</div>
+        <div id="score-message">${scoreMessage}</div>
+      `;
+      
+      console.log("המשחק הסתיים! ציון סופי:", score); // לוג לדיבוג
     }
-
-    document.getElementById("result").innerHTML = finalMessage;
-    document.getElementById("next-button").style.display = "none";
-    document.getElementById("restart-button").style.display = "inline-block";
   }
 </script>
 
