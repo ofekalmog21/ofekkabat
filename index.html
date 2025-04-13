@@ -136,33 +136,42 @@
     margin-top: 20px;
     animation: fadeIn 0.5s ease-in-out;
   }
+.question {
+  font-size: 6.5vw; /* היה 5vw – הגדלנו */
+  margin-bottom: 30px;
+  color: #fff;
+  text-align: center;
+  animation: fadeIn 1s ease-in-out;
+  line-height: 1.8; /* יותר מרווח לקריאות */
+}
 
-  .question {
-    font-size: 5vw;
-    margin-bottom: 25px;
-    color: #fff;
-    text-align: center;
-    animation: fadeIn 1s ease-in-out;
-    line-height: 1.5;
-  }
+.question-number {
+  font-weight: bold;
+  color: #ff6347;
+  margin-bottom: 20px;
+  font-size: 6vw; /* היה 4.5vw – הגדלנו */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-  .question-number {
-    font-weight: bold;
-    color: #ff6347;
-    margin-bottom: 15px;
-    font-size: 4.5vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.option {
+  background: rgba(30, 60, 88, 0.8);
+  color: #fff;
+  margin: 16px 0;
+  padding: 5vw; /* היה 4vw – יותר ריווח פנימי */
+  border-radius: 14px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  font-size: 6vw; /* היה 4.5vw – הרבה יותר ברור */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+  transition: all 0.3s ease;
+  animation: slideIn 0.5s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  text-align: right;
+}
 
-  .progress-container {
-    width: 100%;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 10px;
-    margin-bottom: 20px;
-    overflow: hidden;
-  }
 
   .progress-bar {
     height: 10px;
