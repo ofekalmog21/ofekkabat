@@ -870,7 +870,8 @@ fetch("https://script.google.com/macros/s/AKfycbyFBjqcV2H2NhaEHiWiHRqEMYCVSl-T8z
     score: score
   })
 })
-.then(response => console.log("המידע נשלח לגיליון"))
+.then(response => response.text())
+.then(data => console.log("הנתונים נשלחו:", data))
 .catch(error => console.error("שגיאה בשליחה:", error));
 
     }
