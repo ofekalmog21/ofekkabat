@@ -857,6 +857,22 @@
       `;
       
       console.log("המשחק הסתיים! ציון סופי:", score); // לוג לדיבוג
+// שליחה ל-Google Sheets
+fetch("https://script.google.com/macros/s/AKfycbyFBjqcV2H2NhaEHiWiHRqEMYCVSl-T8zZLptS-UpbXfpXzzhz6lb8aJKZW7tCAqbDB/exec", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    fullName: document.getElementById("full-name").value,
+    platoon: document.getElementById("platoon").value,
+    team: document.getElementById("team").value,
+    score: score
+  })
+})
+.then(response => console.log("המידע נשלח לגיליון"))
+.catch(error => console.error("שגיאה בשליחה:", error));
+
     }
   }
 </script>
