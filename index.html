@@ -748,7 +748,40 @@
   let score = 0;
 
   // אתחול אירוע הלחיצה על כפתור ההתחלה
-  document.getElementById("start-btn").addEventListener("click", startGame);
+  
+document.getElementById("start-btn").addEventListener("click", function (e) {
+  e.preventDefault();
+
+  const name = document.getElementById("full-name").value;
+  const platoon = document.getElementById("platoon").value;
+  const team = document.getElementById("team").value;
+
+  if (!name || !platoon || !team) {
+    alert("יש למלא את כל השדות לפני התחלת המשחק.");
+    return;
+  }
+
+  fetch("https://formspree.io/f/xqapnoad", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      "שם מלא": name,
+      "פלוגה": platoon,
+      "צוות": team
+    })
+  })
+  .then(response => {
+    console.log("נשלח ל-Formspree");
+    startGame();
+  })
+  .catch(error => {
+    console.error("שגיאה בשליחה:", error);
+    alert("שגיאה בשליחת הטופס. נסה שוב.");
+  });
+});
+
 
   function startGame() {
     console.log("המשחק מתחיל!"); // לוג לדיבוג
